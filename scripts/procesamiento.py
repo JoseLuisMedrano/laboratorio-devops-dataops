@@ -35,15 +35,17 @@ db_name = "laboratorio"
 db_user = "admin"
 db_pass = "admin123"
 
-# Forzar codificacion estricta en el sistema para psycopg2
+# Forzar codificacion estricta en el sistema
 os.environ["LANG"] = "en_US.UTF-8"
 os.environ["LC_ALL"] = "en_US.UTF-8"
 
-conn = psycopg2.connect(host=db_host, database=db_name, user=db_user, password=db_pass)
+# Usamos una cadena URI directa para evitar que psycopg2 consulte configuraciones de Windows
+dsn_string = f"postgresql://{db_user}:{db_pass}@{db_host}:5432/{db_name}"
+
+conn = psycopg2.connect(dsn_string)
 cursor = conn.cursor()
 
 print("Conexion PostgreSQL exitosa")
-
 # =========================
 # Creacion de tabla
 # =========================
