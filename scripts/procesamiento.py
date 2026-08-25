@@ -31,18 +31,11 @@ print("Archivo exportado correctamente")
 # =========================
 # Conexión PostgreSQL
 # =========================
-conn = psycopg2.connect(
-    host="127.0.0.1",
-    port=5432,
-    database="laboratorio",
-    user="admin",
-    password="admin123",
-    client_encoding="UTF8",
-)
+dsn = "postgresql://admin:admin123@127.0.0.1:5432/laboratorio?client_encoding=utf8"
+conn = psycopg2.connect(dsn)
 cursor = conn.cursor()
 
 print("Conexion PostgreSQL exitosa")
-
 # =========================
 # Creacion de tabla
 # =========================
