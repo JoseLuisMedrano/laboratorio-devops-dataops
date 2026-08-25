@@ -41,10 +41,10 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
-print("Conexión PostgreSQL exitosa")
+print("Conexion PostgreSQL exitosa")
 
 # =========================
-# Creación de tabla
+# Creacion de tabla
 # =========================
 cursor.execute(""" 
 CREATE TABLE IF NOT EXISTS clientes ( 
