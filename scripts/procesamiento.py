@@ -31,7 +31,10 @@ print("Archivo exportado correctamente")
 # =========================
 # Conexión PostgreSQL
 # =========================
-dsn = "postgresql://admin:admin123@127.0.0.1:5432/laboratorio?client_encoding=utf8"
+# =========================
+# Conexion PostgreSQL
+# =========================
+dsn = "postgresql://admin:admin123@127.0.0.1:5432/laboratorio"
 conn = psycopg2.connect(dsn)
 cursor = conn.cursor()
 
