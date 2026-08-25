@@ -32,11 +32,12 @@ print("Archivo exportado correctamente")
 # Conexión PostgreSQL
 # =========================
 conn = psycopg2.connect(
-    host="127.0.0.1",  # Cambiado a IP local explícita
+    host="127.0.0.1",
     port=5432,
     database="laboratorio",
     user="admin",
     password="admin123",
+    client_encoding="UTF8",
 )
 cursor = conn.cursor()
 
