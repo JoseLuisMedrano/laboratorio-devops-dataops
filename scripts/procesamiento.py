@@ -35,6 +35,10 @@ db_name = "laboratorio"
 db_user = "admin"
 db_pass = "admin123"
 
+# Forzar codificacion estricta en el sistema para psycopg2
+os.environ["LANG"] = "en_US.UTF-8"
+os.environ["LC_ALL"] = "en_US.UTF-8"
+
 conn = psycopg2.connect(host=db_host, database=db_name, user=db_user, password=db_pass)
 cursor = conn.cursor()
 
