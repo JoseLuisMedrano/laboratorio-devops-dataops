@@ -1,3 +1,6 @@
+import os
+
+os.environ["LC_ALL"] = "C"
 import pandas as pd
 import psycopg2
 
