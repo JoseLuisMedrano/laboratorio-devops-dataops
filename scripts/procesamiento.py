@@ -1,8 +1,6 @@
 import os
-
-os.environ["LC_ALL"] = "C"
 import pandas as pd
-import psycopg2
+import sqlite3
 
 # =========================
 # Lectura del dataset
@@ -14,9 +12,7 @@ print(df)
 # =========================
 # Limpieza de datos
 # =========================
-# Eliminacion de duplicados
 df = df.drop_duplicates()
-# Reemplazo de valores nulos
 df = df.fillna(0)
 print("Dataset limpio")
 print(df)
@@ -24,37 +20,28 @@ print(df)
 # =========================
 # Exportacion de dataset limpio
 # =========================
+os.makedirs("output", exist_ok=True)
 df.to_csv("output/dataset_limpio.csv", index=False)
 print("Archivo exportado correctamente")
 
 # =========================
-# Conexion PostgreSQL
+# Conexion SQLite (Base de datos local segura)
 # =========================
-db_host = "127.0.0.1"
-db_name = "laboratorio"
-db_user = "admin"
-db_pass = "admin123"
-
-# Forzar codificacion estricta en el sistema
-os.environ["LANG"] = "en_US.UTF-8"
-os.environ["LC_ALL"] = "en_US.UTF-8"
-
-# Usamos una cadena URI directa para evitar que psycopg2 consulte configuraciones de Windows
-dsn_string = f"postgresql://{db_user}:{db_pass}@{db_host}:5432/{db_name}"
-
-conn = psycopg2.connect(dsn_string)
+os.makedirs("database", exist_ok=True)
+conn = sqlite3.connect("database/laboratorio.db")
 cursor = conn.cursor()
 
-print("Conexion PostgreSQL exitosa")
+print("Conexion SQLite exitosa")
+
 # =========================
 # Creacion de tabla
 # =========================
 cursor.execute(""" 
 CREATE TABLE IF NOT EXISTS clientes ( 
     id INT, 
-    nombre VARCHAR(50), 
+    nombre TEXT, 
     edad INT, 
-    ciudad VARCHAR(50) 
+    ciudad TEXT 
 ) 
 """)
 
@@ -71,9 +58,14 @@ for index, row in df.iterrows():
     cursor.execute(
         """ 
         INSERT INTO clientes (id, nombre, edad, ciudad) 
-        VALUES (%s, %s, %s, %s) 
+        VALUES (?, ?, ?, ?) 
         """,
-        (int(row["id"]), row["nombre"], int(float(row["edad"])), row["ciudad"]),
+        (
+            int(row["id"]),
+            str(row["nombre"]),
+            int(float(row["edad"])),
+            str(row["ciudad"]),
+        ),
     )
 
 conn.commit()
@@ -85,7 +77,7 @@ print("Datos insertados correctamente")
 cursor.execute("SELECT * FROM clientes")
 resultado = cursor.fetchall()
 print(f"Total registros: {len(resultado)}")
-print("Datos almacenados en PostgreSQL")
+print("Datos almacenados en SQLite")
 
 for fila in resultado:
     print(fila)
